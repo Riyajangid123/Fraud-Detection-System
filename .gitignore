@@ -16,6 +16,7 @@ venv/
 env/
 .env/
 ENV/
+fraud_detection/
 
 # Environment Variables (IMPORTANT - keep secrets safe)
 .env
