@@ -1,0 +1,16 @@
+creation_timestamp: 1774938102148
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1774938102148
+model_id: m-bc4e12e35284404db5d24addb64f10a0
+name: FraudDetectionModel
+run_id: 241f3bb69fad409588812830e497aeee
+run_link: null
+source: models:/m-bc4e12e35284404db5d24addb64f10a0
+status: READY
+status_message: null
+storage_location: file:///C:/Users/DELL/OneDrive/Desktop/Credit_Card_Fraud_Detection_System/mlruns/533305769482719611/models/m-bc4e12e35284404db5d24addb64f10a0/artifacts
+user_id: null
+version: 2
+workspace: default

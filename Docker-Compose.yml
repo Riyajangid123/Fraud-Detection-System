@@ -1,0 +1,52 @@
+version: "3.8"
+ 
+services:
+
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3307:3306"      
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql   # auto-creates table on first run
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-predhat"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fraud_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: fraud_api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql_db:
+        condition: service_healthy   # waits for MySQL to be ready
+    environment:
+      DB_HOST: ${DB_HOST}            # use service name, not localhost
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: streamlit
+    restart: always
+    ports:
+      - "8501:8501"
+    depends_on:
+      - fraud_api                    # waits for API to start
+
+volumes:
+  mysql_data:

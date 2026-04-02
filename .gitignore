@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+
+# Virtual Environment
+venv/
+env/
+.env/
+ENV/
+
+# Environment Variables (IMPORTANT - keep secrets safe)
+.env
+.env.local
+.env.production
+*.env
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# Model files (usually large)
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.pt
+*.pth
+*.model
+
+# Data files (usually large)
+*.csv
+*.xlsx
+*.json
+data/
+datasets/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker
+.docker/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+*.suo
+*.user
+
+# Coverage / Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Misc
+*.zip
+*.tar.gz
+
+.env
