@@ -12,3 +12,5 @@ fastapi
 imbalanced-learn
 mysql-connector-python
 python-dotenv
+pytest
+httpx

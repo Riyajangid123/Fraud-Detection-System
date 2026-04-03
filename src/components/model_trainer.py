@@ -73,6 +73,7 @@ class ModelTrainer:
             mlflow.log_param("cv_folds", 3)
             mlflow.log_param("best_threshold", best_threshold)
 
+            mlflow.log_metric("best_threshold", best_threshold)
             mlflow.log_metric("precision", precision)
             mlflow.log_metric("recall", recall)
             mlflow.log_metric("f1_score", f1)

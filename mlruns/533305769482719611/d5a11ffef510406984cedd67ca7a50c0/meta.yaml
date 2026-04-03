@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/DELL/OneDrive/Desktop/Credit_Card_Fraud_Detection_System/mlruns/533305769482719611/d5a11ffef510406984cedd67ca7a50c0/artifacts
+end_time: 1775147410593
+entry_point_name: ''
+experiment_id: '533305769482719611'
+lifecycle_stage: active
+run_id: d5a11ffef510406984cedd67ca7a50c0
+run_name: stately-bat-560
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1775147311951
+status: 3
+tags: []
+user_id: DELL
