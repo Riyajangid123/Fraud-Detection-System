@@ -1,13 +1,15 @@
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
-import sys
+import joblib
+from main import app
+
 
 # Mock model before importing app
 mock_model = MagicMock()
 mock_model.predict_proba.return_value = [[0.2, 0.8]]
 
-with patch("joblib.load", return_value=mock_model):
-    from main import app
+# Patch joblib.load before importing main
+joblib.load = lambda x: mock_model
 
 
 client = TestClient(app)
