@@ -26,14 +26,17 @@ jobs:
 
       - name: Create dummy model for testing
         run: |
-          python -c "
-          import joblib, os
-          from unittest.mock import MagicMock
-          os.makedirs('models', exist_ok=True)
-          mock_model = MagicMock()
-          mock_model.predict_proba = lambda x: [[0.2, 0.8]]
-          joblib.dump(mock_model, 'models/model.pkl')
-          "
+            python -c "
+            import joblib, os
+            import numpy as np
+            from sklearn.ensemble import RandomForestClassifier
+            os.makedirs('models', exist_ok=True)
+            model = RandomForestClassifier(n_estimators=2)
+            X = np.array([[1]*30, [0]*30])
+            y = [0, 1]
+            model.fit(X, y)
+            joblib.dump(model, 'models/model.pkl')
+            "
 
       - name: Run tests
         run: |
