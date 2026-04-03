@@ -1,21 +1,25 @@
-from fastapi.testclient import TestClient
-from unittest.mock import patch, MagicMock
+import os
 import joblib
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from fastapi.testclient import TestClient
+from unittest.mock import patch
+
+# Create real dummy model BEFORE importing app
+os.makedirs('models', exist_ok=True)
+dummy_model = RandomForestClassifier(n_estimators=2)
+X = np.array([[1]*30, [0]*30])
+y = [0, 1]
+dummy_model.fit(X, y)
+joblib.dump(dummy_model, 'models/model.pkl')
+
+# Now import app (model.pkl exists now)
 from main import app
 
-
-# Mock model before importing app
-mock_model = MagicMock()
-mock_model.predict_proba.return_value = [[0.2, 0.8]]
-
-# Patch joblib.load before importing main
-joblib.load = lambda x: mock_model
-
-
+# Step 3: Create test client
 client = TestClient(app)
 
-client = TestClient(app) #testclient checks that without running the app it test in python
-
+# Sample transaction data
 sample_transaction = {
     "Time": 1000.0,
     "Amount": 149.62,
@@ -28,17 +32,15 @@ sample_transaction = {
     "V25": 0.12, "V26": -0.18, "V27": 0.13, "V28": -0.02
 }
 
-#Checking that home endpoint is alive or not
+# Check home endpoint is alive
 def test_home():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "Welcome to Fraud Detection System"}
 
-
 # Predict endpoint returns correct response structure
-@patch("main.insert_prediction")  # mock DB so no real DB needed during testing for faster execution
+@patch("main.insert_prediction")
 def test_predict_returns_correct_structure(mock_insert):
-    mock_insert.return_value = None
     response = client.post("/predict", json=sample_transaction)
     assert response.status_code == 200
     data = response.json()
@@ -46,35 +48,28 @@ def test_predict_returns_correct_structure(mock_insert):
     assert "fraud_probability" in data
     assert "amount" in data
 
-
 # Status is either FRAUD or LEGIT
 @patch("main.insert_prediction")
 def test_predict_status_values(mock_insert):
-    mock_insert.return_value = None
     response = client.post("/predict", json=sample_transaction)
     assert response.status_code == 200
     assert response.json()["status"] in ["FRAUD", "LEGIT"]
 
-
 # Amount in response matches input
 @patch("main.insert_prediction")
 def test_predict_amount_matches(mock_insert):
-    mock_insert.return_value = None
     response = client.post("/predict", json=sample_transaction)
     assert response.status_code == 200
     assert response.json()["amount"] == sample_transaction["Amount"]
 
-
 # Missing required fields returns 422
 def test_predict_missing_fields():
-    response = client.post("/predict", json={"Amount": 100.0})  # missing Time
+    response = client.post("/predict", json={"Amount": 100.0})
     assert response.status_code == 422
-
 
 # Fraud probability is between 0 and 1
 @patch("main.insert_prediction")
 def test_fraud_probability_range(mock_insert):
-    mock_insert.return_value = None
     response = client.post("/predict", json=sample_transaction)
     prob = response.json()["fraud_probability"]
     assert 0.0 <= prob <= 1.0
