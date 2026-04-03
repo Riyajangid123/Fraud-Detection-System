@@ -1,6 +1,16 @@
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
-from main import app
+import sys
+
+# Mock model before importing app
+mock_model = MagicMock()
+mock_model.predict_proba.return_value = [[0.2, 0.8]]
+
+with patch("joblib.load", return_value=mock_model):
+    from main import app
+
+
+client = TestClient(app)
 
 client = TestClient(app) #testclient checks that without running the app it test in python
 
