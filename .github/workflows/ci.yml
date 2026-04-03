@@ -27,7 +27,7 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pytest tests/test_api.py -v
+          python -m pytest test/test_api.py -v
 
   # Build Docker Image (only if tests pass)
   build:
