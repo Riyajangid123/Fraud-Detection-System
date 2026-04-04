@@ -57,3 +57,20 @@ jobs:
           file: Dockerfile.frontend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/fraud-detection-frontend:latest
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # runs only after build passes
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd Fraud-Detection-System
+            git pull origin main
+            docker-compose -f Docker-Compose.yml down
+            docker-compose -f Docker-Compose.yml up -d

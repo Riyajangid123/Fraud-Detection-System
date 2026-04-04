@@ -29,13 +29,12 @@ fraud_detection/
 notebooks/.ipynb_checkpoints/
 
 # Model files (usually large)
-*.pkl
 *.pickle
 *.joblib
 *.h5
 *.pt
 *.pth
-*.model
+
 
 # Data files (usually large)
 *.csv
