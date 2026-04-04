@@ -39,8 +39,8 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.riya7737 }}
-          password: ${{ secrets.November2005 }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push API image
         uses: docker/build-push-action@v4
@@ -48,7 +48,7 @@ jobs:
           context: .
           file: Dockerfile.api
           push: true
-          tags: ${{ secrets.riya7737 }}/fraud-detection-api:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/fraud-detection-api:latest
 
       - name: Build and Push Frontend image
         uses: docker/build-push-action@v4
@@ -56,4 +56,4 @@ jobs:
           context: .
           file: Dockerfile.frontend
           push: true
-          tags: ${{ secrets.riya7737 }}/fraud-detection-frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/fraud-detection-frontend:latest
