@@ -15,7 +15,7 @@ services:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql   # auto-creates table on first run
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-predhat"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", ${DB_PASSWORD}]
       interval: 10s
       timeout: 5s
       retries: 5
