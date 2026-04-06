@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from fastapi.testclient import TestClient
 from unittest.mock import patch
 
-# Create real dummy model BEFORE importing app
+# Creating real dummy model BEFORE importing app
 os.makedirs('models', exist_ok=True)
 dummy_model = RandomForestClassifier(n_estimators=2)
 X = np.array([[1]*30, [0]*30])
@@ -16,7 +16,7 @@ joblib.dump(dummy_model, 'models/model.pkl')
 # Now import app (model.pkl exists now)
 from main import app
 
-# Step 3: Create test client
+# Creating test client
 client = TestClient(app)
 
 # Sample transaction data
@@ -32,13 +32,13 @@ sample_transaction = {
     "V25": 0.12, "V26": -0.18, "V27": 0.13, "V28": -0.02
 }
 
-# Check home endpoint is alive
+# Checking home endpoint is alive
 def test_home():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "Welcome to Fraud Detection System"}
 
-# Predict endpoint returns correct response structure
+# Predicting endpoint returns correct response structure
 @patch("main.insert_prediction")
 def test_predict_returns_correct_structure(mock_insert):
     response = client.post("/predict", json=sample_transaction)
