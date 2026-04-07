@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from fastapi.testclient import TestClient
 from unittest.mock import patch
 
-# Creating real dummy model BEFORE importing app
+
 os.makedirs('models', exist_ok=True)
 dummy_model = RandomForestClassifier(n_estimators=2)
 X = np.array([[1]*30, [0]*30])
@@ -13,7 +13,6 @@ y = [0, 1]
 dummy_model.fit(X, y)
 joblib.dump(dummy_model, 'models/model.pkl')
 
-# Now import app (model.pkl exists now)
 from main import app
 
 # Creating test client
