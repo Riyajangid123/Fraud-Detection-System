@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/DELL/OneDrive/Desktop/Credit_Card_Fraud_Detection_System/mlruns/533305769482719611/828ce8cbf7e24bcdb3c109c61e1df354/artifacts
+end_time: 1775655730971
+entry_point_name: ''
+experiment_id: '533305769482719611'
+lifecycle_stage: active
+run_id: 828ce8cbf7e24bcdb3c109c61e1df354
+run_name: crawling-roo-199
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1775655498509
+status: 3
+tags: []
+user_id: DELL

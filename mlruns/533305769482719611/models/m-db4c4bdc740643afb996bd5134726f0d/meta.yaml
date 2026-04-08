@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/DELL/OneDrive/Desktop/Credit_Card_Fraud_Detection_System/mlruns/533305769482719611/models/m-db4c4bdc740643afb996bd5134726f0d/artifacts
+creation_timestamp: 1775655704926
+experiment_id: '533305769482719611'
+last_updated_timestamp: 1775655729024
+model_id: m-db4c4bdc740643afb996bd5134726f0d
+model_type: null
+name: model
+source_run_id: 828ce8cbf7e24bcdb3c109c61e1df354
+status: 2
+status_message: null
