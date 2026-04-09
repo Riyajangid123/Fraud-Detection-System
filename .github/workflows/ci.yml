@@ -76,4 +76,4 @@ jobs:
            cd Fraud-Detection-System
            git pull origin main
            docker-compose -f Docker-Compose.yml down || true
-           docker-compose -f Docker-Compose.yml up -d --build
+           docker-compose -f Docker-Compose.yml up -d 

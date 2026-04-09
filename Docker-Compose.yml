@@ -32,7 +32,7 @@ services:
       mysql_db:
         condition: service_healthy   # waits for MySQL to be ready
     environment:
-      DB_HOST: ${DB_HOST}            # use service name, not localhost
+      DB_HOST: mysql_db            
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
