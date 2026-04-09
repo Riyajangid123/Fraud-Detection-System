@@ -70,7 +70,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd Fraud-Detection-System
-            git pull origin main
-            docker-compose -f Docker-Compose.yml down
-            docker-compose -f Docker-Compose.yml up -d
+           if [ ! -d "Fraud-Detection-System" ]; then
+           git clone https://github.com/YOUR_USERNAME/Fraud-Detection-System.git
+           fi
+           cd Fraud-Detection-System
+           git pull origin main
+           docker-compose down || true
+           docker-compose up -d --build
