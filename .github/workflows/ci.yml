@@ -71,7 +71,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
            if [ ! -d "Fraud-Detection-System" ]; then
-           git clone https://github.com/YOUR_USERNAME/Fraud-Detection-System.git
+           git clone https://github.com/Riyajangid123/Fraud-Detection-System.git
            fi
            cd Fraud-Detection-System
            git pull origin main
