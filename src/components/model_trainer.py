@@ -47,6 +47,7 @@ class ModelTrainer:
                 n_jobs=-1
             )
             y_prob = model_pipeline.predict_proba(x_test)[:, 1]
+            roc_auc = roc_auc_score(y_test, y_prob)
 
             best_f1 = 0
             best_threshold = 0
@@ -62,9 +63,7 @@ class ModelTrainer:
                 if f1_t > best_f1:
                     best_f1 = f1_t
                     best_threshold = t
-            y_prob = model_pipeline.predict_proba(x_test)[:, 1]
-            roc_auc = roc_auc_score(y_test, y_prob)
-
+            
             print(f"cross validation score-->{cross.mean()}")
 
             mlflow.log_param("model", "RandomForest")
