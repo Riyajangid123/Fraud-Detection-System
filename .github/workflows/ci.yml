@@ -95,7 +95,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          command_timeout: 10m
+          command_timeout: 25m
           envs: DOCKER_USERNAME,DOCKER_PASSWORD      
           script: |
             set -eo pipefail
@@ -125,10 +125,10 @@ jobs:
             docker ps -a
 
             echo "==> API container logs:"
-            docker-compose -f Docker-Compose.yml logs api --tail=30
+            docker-compose -f Docker-Compose.yml logs fraud_api --tail=30
 
             echo "==> Frontend container logs:"
-            docker-compose -f Docker-Compose.yml logs frontend --tail=30
+            docker-compose -f Docker-Compose.yml logs streamlit --tail=30
 
             echo "==> Waiting for containers to initialize..."
             sleep 20
