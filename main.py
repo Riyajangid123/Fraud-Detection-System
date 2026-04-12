@@ -17,10 +17,6 @@ threshold=0.8
 def home():
     return {"message":"Welcome to Fraud Detection System"}
 
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy"}
-
 @app.post("/predict")
 def predict(data:Transaction):
     try:
