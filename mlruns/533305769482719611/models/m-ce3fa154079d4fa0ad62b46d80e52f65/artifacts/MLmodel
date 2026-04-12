@@ -1,0 +1,23 @@
+artifact_path: file:///C:/Users/DELL/OneDrive/Desktop/Credit_Card_Fraud_Detection_System/mlruns/533305769482719611/models/m-ce3fa154079d4fa0ad62b46d80e52f65/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.11.9
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.10.1
+model_id: m-ce3fa154079d4fa0ad62b46d80e52f65
+model_size_bytes: 373318
+model_uuid: m-ce3fa154079d4fa0ad62b46d80e52f65
+prompts: null
+run_id: c80e419dc08f4a2c87bca1a5e9ac0036
+utc_time_created: '2026-04-12 05:52:28.386855'
