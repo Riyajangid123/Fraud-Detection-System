@@ -99,34 +99,28 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/fraud-detection-api:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/fraud-detection-frontend:latest
             
-            echo "Starting services..."
-            docker-compose -f Docker-Compose.yml up -d
-            
-            echo "Waiting for services to initialize..."
-            sleep 10
-            
-            echo "Container Status:"
-            docker-compose -f Docker-Compose.yml ps
-            
-            echo "Starting services..."
-            docker-compose -f Docker-Compose.yml up -d
-
             echo "Waiting for services to initialize..."
             sleep 15
 
             echo "Checking API health..."
-            if curl -f http://localhost:8000/ 2>/dev/null; then
-              echo "API is healthy!"
-            else
-              echo "API is NOT ready yet (check logs)"
-            fi
+            for i in 1 2 3; do
+              if curl -sf http://localhost:8000/ >/dev/null; then
+                echo "API is healthy!"
+                break
+              fi
+              echo "API not ready (attempt $i/3)"
+              sleep 5
+            done
 
             echo "Checking Frontend health..."
-            if curl -f http://localhost:8501/ 2>/dev/null; then
-              echo "Frontend is healthy!"
-            else
-              echo "Frontend is NOT ready yet (check logs)"
-            fi
+            for i in 1 2 3; do
+              if curl -sf http://localhost:8501/ >/dev/null; then
+                echo "Frontend is healthy!"
+                break
+              fi
+              echo "Frontend not ready (attempt $i/3)"
+              sleep 5
+            done
 
             echo "Recent logs:"
             docker-compose -f Docker-Compose.yml logs --tail=30
