@@ -90,10 +90,10 @@ jobs:
             EOF
             
             echo "Stopping old containers..."
-            docker-compose -f Docker-Compose.yml down -v || true
+            docker-compose -f Docker-Compose.yml down  || true
             
             echo "Cleaning up..."
-            docker image prune -f
+            docker system prune -f
             
             echo "Pulling latest images..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/fraud-detection-api:latest
@@ -103,13 +103,13 @@ jobs:
             docker-compose -f Docker-Compose.yml up -d
             
             echo "Waiting for services to initialize..."
-            sleep 20
+            sleep 10
             
             echo "Container Status:"
             docker-compose -f Docker-Compose.yml ps
             
             echo "Checking API health..."
-            for i in {1..30}; do
+            for i in {1..15}; do
               if curl -f http://localhost:8000/ 2>/dev/null; then
                 echo "API is healthy!"
                 break
@@ -119,13 +119,13 @@ jobs:
             done
             
             echo "Checking Frontend health..."
-            for i in {1..20}; do
+            for i in {1..10}; do
               if curl -f http://localhost:8501 2>/dev/null; then
                 echo "Frontend is healthy!"
                 break
               fi
               echo "Waiting for Frontend... ($i/20)"
-              sleep 2
+              sleep 5
             done
             
             echo "Recent logs:"
