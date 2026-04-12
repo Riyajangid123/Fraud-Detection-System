@@ -71,16 +71,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
-            
-            if [ ! -d "Fraud-Detection-System" ]; then
-              echo "Cloning repository..."
-              git clone https://github.com/Riyajangid123/Fraud-Detection-System.git
-            fi
-            
-            cd Fraud-Detection-System
+
             echo "Pulling latest code..."
             git pull origin main
-            
+
             echo "Creating environment file..."
             cat > .env << 'EOF'
             DB_HOST=mysql_db
@@ -88,41 +82,36 @@ jobs:
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             DB_NAME=${{ secrets.DB_NAME }}
             EOF
-            
+
             echo "Stopping old containers..."
-            docker-compose -f Docker-Compose.yml down  || true
-            
-            echo "Cleaning up..."
-            docker system prune -f
-            
-            echo "Pulling latest images..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/fraud-detection-api:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/fraud-detection-frontend:latest
-            
-            echo "Waiting for services to initialize..."
-            sleep 15
+            docker-compose -f Docker-Compose.yml down || true
+
+            echo "Starting services..."
+            docker-compose -f Docker-Compose.yml up -d --build
+
+            echo "Waiting for services..."
+            sleep 20
+
+            echo "Checking container status..."
+            docker ps
 
             echo "Checking API health..."
-            for i in 1 2 3; do
-              if curl -sf http://localhost:8000/ >/dev/null; then
-                echo "API is healthy!"
-                break
-              fi
-              echo "API not ready (attempt $i/3)"
-              sleep 5
-            done
+            if curl -sf http://localhost:8000/ >/dev/null; then
+              echo "API is healthy"
+            else
+              echo " API FAILED"
+              exit 1
+            fi
 
             echo "Checking Frontend health..."
-            for i in 1 2 3; do
-              if curl -sf http://localhost:8501/ >/dev/null; then
-                echo "Frontend is healthy!"
-                break
-              fi
-              echo "Frontend not ready (attempt $i/3)"
-              sleep 5
-            done
+            if curl -sf http://localhost:8501/ >/dev/null; then
+              echo "Frontend is healthy"
+            else
+              echo "Frontend FAILED"
+              exit 1
+            fi
 
             echo "Recent logs:"
             docker-compose -f Docker-Compose.yml logs --tail=30
 
-            echo "Deployment completed!"
+            echo "Deployment SUCCESS"
