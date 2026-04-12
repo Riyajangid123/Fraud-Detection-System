@@ -1,7 +1,6 @@
 version: "3.8"
- 
-services:
 
+services:
   mysql_db:
     image: mysql:8.0
     container_name: mysql_db
@@ -10,15 +9,22 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
     ports:
-      - "3307:3306"      
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql   # auto-creates table on first run
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10  
+      start_period: 30s  
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
 
   fraud_api:
     image: riya7737/fraud-detection-api:latest
@@ -28,12 +34,24 @@ services:
       - "8000:8000"
     depends_on:
       mysql_db:
-        condition: service_healthy   # waits for MySQL to be ready
+        condition: service_healthy
     environment:
-      DB_HOST: mysql_db            
+      DB_HOST: mysql_db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
 
   streamlit:
     image: riya7737/fraud-detection-frontend:latest
@@ -42,7 +60,20 @@ services:
     ports:
       - "8501:8501"
     depends_on:
-      - fraud_api                    # waits for API to start
+      fraud_api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
 
 volumes:
   mysql_data:
