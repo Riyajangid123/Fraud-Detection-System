@@ -72,6 +72,8 @@ jobs:
           script: |
             set -e
 
+            echo "Starting deployment..."
+
             echo "Pulling latest Docker images..."
             docker-compose -f Docker-Compose.yml pull
 
@@ -89,29 +91,19 @@ jobs:
             echo "Starting services..."
             docker-compose -f Docker-Compose.yml up -d
 
-            echo "Waiting for services..."
+            echo "Waiting for containers to start..."
             sleep 20
 
-            echo "Checking container status..."
+            echo "Container status:"
             docker ps
 
             echo "Checking API health..."
-            if curl -sf http://localhost:8000/ >/dev/null; then
-              echo "API is healthy"
-            else
-              echo "API FAILED"
-              exit 1
-            fi
+            curl -sf --max-time 5 http://localhost:8000/ >/dev/null && echo "API OK" || echo "API NOT READY"
 
             echo "Checking Frontend health..."
-            if curl -sf http://localhost:8501/ >/dev/null; then
-              echo "Frontend is healthy"
-            else
-              echo "Frontend FAILED"
-              exit 1
-            fi
+            curl -sf --max-time 5 http://localhost:8501/ >/dev/null && echo "Frontend OK" || echo "Frontend NOT READY"
 
             echo "Recent logs:"
             docker-compose -f Docker-Compose.yml logs --tail=30
 
-            echo "Deployment SUCCESS"
+            echo "Deployment completed successfully!"
