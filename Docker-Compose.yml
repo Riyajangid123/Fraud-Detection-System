@@ -22,9 +22,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
-        reservations:
           memory: 256M
+        reservations:
+          memory: 128M
 
   fraud_api:
     image: riya7737/fraud-detection-api:latest
@@ -49,9 +49,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1G
-        reservations:
           memory: 512M
+        reservations:
+          memory: 256M
 
   streamlit:
     image: riya7737/fraud-detection-frontend:latest
@@ -67,6 +67,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
+
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
       
 volumes:
   mysql_data:

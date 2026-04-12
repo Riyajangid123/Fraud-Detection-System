@@ -125,10 +125,10 @@ jobs:
             docker ps -a
 
             echo "==> API container logs:"
-            docker-compose -f Docker-Compose.yml logs fraud_api --tail=30
+            docker-compose -f Docker-Compose.yml logs --tail=30 fraud_api 
 
             echo "==> Frontend container logs:"
-            docker-compose -f Docker-Compose.yml logs streamlit --tail=30
+            docker-compose -f Docker-Compose.yml logs --tail=30 streamlit 
 
             echo "==> Waiting for containers to initialize..."
             sleep 20
