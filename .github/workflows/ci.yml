@@ -70,20 +70,14 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            
             set -e
 
-            echo "Starting deployment..."
+            echo "Moving to project directory..."
+            cd Fraud-Detection-System
 
             echo "Pulling latest Docker images..."
             docker-compose -f Docker-Compose.yml pull
-
-            echo "Creating environment file..."
-            cat > .env << 'EOF'
-            DB_HOST=mysql_db
-            DB_USER=${{ secrets.DB_USER }}
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            DB_NAME=${{ secrets.DB_NAME }}
-            EOF
 
             echo "Stopping old containers..."
             docker-compose -f Docker-Compose.yml down || true
@@ -91,19 +85,19 @@ jobs:
             echo "Starting services..."
             docker-compose -f Docker-Compose.yml up -d
 
-            echo "Waiting for containers to start..."
+            echo "Waiting for containers..."
             sleep 20
 
             echo "Container status:"
             docker ps
 
-            echo "Checking API health..."
-            curl -sf --max-time 5 http://localhost:8000/ >/dev/null && echo "API OK" || echo "API NOT READY"
+            echo "Checking API..."
+            curl -sf --max-time 5 http://localhost:8000/ >/dev/null && echo "API OK" || echo "API FAILED"
 
-            echo "Checking Frontend health..."
-            curl -sf --max-time 5 http://localhost:8501/ >/dev/null && echo "Frontend OK" || echo "Frontend NOT READY"
+            echo "Checking Frontend..."
+            curl -sf --max-time 5 http://localhost:8501/ >/dev/null && echo "FRONTEND OK" || echo "FRONTEND FAILED"
 
             echo "Recent logs:"
-            docker-compose -f Docker-Compose.yml logs --tail=30
+            docker-compose -f Docker-Compose.yml logs --tail=50
 
-            echo "Deployment completed successfully!"
+            echo "Deployment finished"
